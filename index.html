@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Alec Guan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single left-aligned column, each project set like a test-log entry with a mono spec rail; one live chart for the FSAE work. */
+:root {
+  --bg: #f4f7f7;
+  --surface: #ffffff;
+  --fg: #142120;
+  --muted: #566664;
+  --line: #d5dfde;
+  --accent: #0b7480;
+  --heat: #c4521d;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1515; --surface: #142020; --fg: #e3eceb; --muted: #95a7a5;
+    --line: #26393a; --accent: #4cc3cc; --heat: #f08a55; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1515; --surface: #142020; --fg: #e3eceb; --muted: #95a7a5;
+  --line: #26393a; --accent: #4cc3cc; --heat: #f08a55; color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--fg); font: 400 16px/1.65 var(--body); }
+body.zone-vex { --bg: #0e0d0f; --surface: #18161a; --fg: #f2eeee; --muted: #a9a0a1; --line: #2e2a2d; --accent: #e8342c; color-scheme: dark; }
+@media (prefers-reduced-motion: no-preference) {
+  body, body *:not(img):not(video) {
+    transition: background-color 1.4s cubic-bezier(0.4, 0, 0.2, 1), color 1.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 1.4s cubic-bezier(0.4, 0, 0.2, 1), fill 1.4s ease, stroke 1.4s ease;
+  }
+}
+.wrap {
+  max-width: 980px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 72px;
+}
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+header.top { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.mark { font: 700 18px/1 var(--display); letter-spacing: -0.01em; color: var(--fg); text-decoration: none; }
+nav { display: flex; gap: 20px; flex-wrap: wrap; font: 500 13px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover { color: var(--accent); }
+
+.photo { margin: 28px 0 0; position: relative; }
+.photo img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: 55% 65%; border-radius: 6px; background: #0b1020; }
+.overlay { position: absolute; top: clamp(18px, 5vw, 44px); left: clamp(18px, 5vw, 44px); right: 18px; display: grid; gap: 10px; color: #f2f5f7; pointer-events: none; }
+.overlay h1 { color: #f2f5f7; text-shadow: 0 2px 24px rgba(5, 10, 25, 0.55); }
+.overlay p { margin: 0; font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: #c9d4e6; }
+.photo figcaption { margin-top: 8px; font: 400 12px/1.4 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.hero { padding-block: 40px 48px; display: grid; gap: 22px; }
+.eyebrow { font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); }
+h1 { margin: 0; font: 700 clamp(44px, 8vw, 84px)/0.98 var(--display); letter-spacing: -0.03em; text-wrap: balance; }
+.lede { margin: 0; max-width: 62ch; font-size: 19px; line-height: 1.6; color: var(--fg); }
+.intro { margin: 0; max-width: 66ch; color: var(--muted); }
+
+section { padding-block: 40px; border-top: 1px solid var(--line); }
+h2 { margin: 0 0 28px; font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+
+.entry { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; padding-block: 28px; }
+.entry + .entry { border-top: 1px dashed var(--line); }
+.rail { display: grid; gap: 14px; align-content: start; font: 400 13px/1.45 var(--mono); color: var(--muted); }
+.rail b { display: block; font-weight: 500; color: var(--fg); }
+.body { min-width: 0; }
+h3 { margin: 0 0 6px; font: 700 clamp(24px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -0.02em; text-wrap: balance; }
+.role { margin: 0 0 16px; color: var(--muted); font-size: 15px; }
+.body p { margin: 0 0 14px; max-width: 66ch; }
+.body p.note { font: 400 12px/1.5 var(--mono); color: var(--muted); }
+.body h4 { margin: 28px 0 8px; font: 500 12px/1.3 var(--mono); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+.body ul { margin: 0 0 14px; padding-left: 18px; max-width: 66ch; }
+.body li { margin-bottom: 6px; }
+
+.specs { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 18px 0 22px; padding: 14px 0; border-block: 1px solid var(--line); font: 400 13px/1.3 var(--mono); }
+.specs div { display: grid; gap: 4px; }
+.specs dt { color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px; }
+.specs dd { margin: 0; color: var(--fg); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+figure.shot { margin: 6px 0 22px; }
+figure.shot img { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--line); background: #111; }
+figure.shot figcaption { margin-top: 8px; }
+figure.flow img { background: #ffffff; }
+figure.diagram { margin: 8px 0 22px; padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+figure.diagram svg { display: block; width: 100%; min-width: 560px; height: auto; overflow: visible; }
+.diagram-eq { margin-bottom: 14px; font: 500 15px/1.4 var(--mono); color: var(--fg); }
+.fc-row { fill: var(--muted); font: 500 10.5px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.fc-box { fill: var(--bg); stroke: var(--line); stroke-width: 1; }
+.fc-in { fill: color-mix(in srgb, var(--accent) 9%, var(--surface)); stroke: var(--accent); stroke-width: 1; }
+.fc-out { fill: var(--accent); stroke: var(--accent); }
+.fc-t { fill: var(--fg); font: 600 12.5px var(--body); }
+.fc-e { fill: var(--muted); font: 400 10.5px var(--mono); }
+.fc-to { fill: var(--surface); font: 600 12.5px var(--body); }
+.fc-eo { fill: var(--surface); font: 400 10.5px var(--mono); opacity: 0.9; }
+.fc-arrow { stroke: var(--muted); stroke-width: 1.25; fill: none; }
+.fc-head { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.fc-key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.fc-key i { display: inline-block; width: 14px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; border: 1px solid var(--line); }
+.fc-key .k-in { background: color-mix(in srgb, var(--accent) 9%, var(--surface)); border-color: var(--accent); }
+.fc-key .k-box { background: var(--bg); }
+.fc-key .k-out { background: var(--accent); border-color: var(--accent); }
+.table-wrap { overflow-x: auto; margin: 4px 0 22px; }
+table.fans { width: 100%; min-width: 620px; border-collapse: collapse; font: 400 13px/1.4 var(--mono); font-variant-numeric: tabular-nums; }
+table.fans caption { text-align: left; caption-side: top; padding-bottom: 10px; font: 400 13px/1.5 var(--body); color: var(--muted); }
+table.fans th { text-align: left; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11px; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+table.fans td { padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.fans td:not(:first-child), table.fans th:not(:first-child) { text-align: right; }
+table.fans tr.sel td { color: var(--fg); font-weight: 500; background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.pick { margin-left: 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 1px 5px; }
+.gallery { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin: 0 0 22px; }
+.gallery figure { margin: 0; min-width: 0; display: grid; grid-template-rows: 1fr auto; gap: 8px; }
+.gallery .g-tall { grid-row: span 2; }
+.gallery img { display: block; width: 100%; max-width: 100%; height: 100%; object-fit: cover; border-radius: 6px; background: var(--line); }
+.gallery .g-cad img { object-fit: contain; background: #ffffff; }
+.gallery figcaption { font: 400 12px/1.4 var(--mono); color: var(--muted); }
+@media (max-width: 720px) {
+  .gallery { grid-template-columns: 1fr; }
+  .gallery .g-tall { grid-row: auto; }
+  .gallery img { height: auto; }
+}
+.vex-banner { margin: 0 0 22px; }
+.vex-banner img { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 21 / 9; object-fit: cover; object-position: 50% 30%; border-radius: 6px; background: #0e0d0f; }
+.vex-banner figcaption { margin-top: 8px; font: 400 12px/1.4 var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.robot-pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; margin: 4px 0 22px; }
+.robot-pair figure.robot { margin: 0; max-width: none; display: grid; grid-template-rows: 1fr auto; }
+.robot-pair figure.robot img { height: 100%; object-fit: cover; }
+@media (max-width: 720px) { .robot-pair { grid-template-columns: 1fr; } .robot-pair figure.robot img { height: auto; } }
+figure.robot { margin: 4px 0 22px; max-width: 520px; }
+figure.robot img { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 6px; background: #ffffff; }
+figure.robot.portrait { max-width: 360px; }
+figure.robot.cad-small { max-width: 380px; }
+.robot-pair.narrow { max-width: 560px; }
+.robot-pair figure.robot video { display: block; width: 100%; max-width: 100%; height: 100%; object-fit: cover; border-radius: 6px; background: #000; }
+@media (max-width: 720px) { .robot-pair figure.robot video { height: auto; } }
+figure.robot figcaption { margin-top: 6px; font: 400 12px/1.4 var(--mono); color: var(--muted); }
+@media (max-width: 720px) { .vex-banner img { aspect-ratio: 4 / 3; } }
+figure.field { margin: 4px 0 16px; max-width: 640px; }
+figure.field img { display: block; width: 100%; max-width: 100%; height: auto; border-radius: 6px; background: #ffffff; }
+figure.field figcaption { margin-top: 6px; font: 400 12px/1.4 var(--mono); color: var(--muted); }
+.media-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 14px; margin: 6px 0 4px; }
+.media-grid figure { margin: 0; min-width: 0; display: grid; grid-template-rows: 1fr auto; gap: 8px; }
+.media-grid .m-tall { grid-column: 2; grid-row: 1 / span 2; }
+.media-grid img, .media-grid video { display: block; width: 100%; max-width: 100%; height: 100%; object-fit: cover; border-radius: 6px; background: var(--line); }
+.media-grid figcaption { font: 400 12px/1.4 var(--mono); color: var(--muted); }
+@media (max-width: 720px) {
+  .media-grid { grid-template-columns: 1fr; }
+  .media-grid .m-tall { grid-column: auto; grid-row: auto; }
+  .media-grid img, .media-grid video { height: auto; }
+  .media-grid video { max-height: 70vh; object-fit: contain; background: #000; }
+}
+figure.clip { margin: 0 0 22px; max-width: 640px; }
+figure.clip video { display: block; width: 100%; max-width: 100%; height: auto; aspect-ratio: 640 / 356; object-fit: cover; border-radius: 6px; background: var(--line); }
+figure.clip figcaption { margin-top: 8px; }
+figure.chart { margin: 8px 0 18px; padding: 18px 18px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.chart-scroll { overflow-x: auto; }
+.chart svg { display: block; width: 100%; min-width: 520px; height: auto; }
+figcaption { margin-top: 10px; font: 400 13px/1.5 var(--body); color: var(--muted); max-width: 70ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 400 12px/1.4 var(--mono); color: var(--muted); margin-bottom: 8px; }
+.legend i { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: 6px; }
+.svg-axis { stroke: var(--line); }
+.svg-text { fill: var(--muted); font: 400 11px var(--mono); }
+.svg-fan { stroke: var(--accent); fill: none; stroke-width: 2.25; }
+.svg-sys { stroke: var(--heat); fill: none; stroke-width: 2.25; }
+.svg-req { stroke: var(--muted); stroke-dasharray: 4 4; }
+.svg-op { fill: var(--fg); }
+
+.result { font-weight: 600; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.tags span { font: 400 12px/1 var(--mono); padding: 6px 8px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); }
+
+.skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 24px 32px; }
+.skills h4 { margin: 0 0 8px; font: 600 15px/1.3 var(--body); }
+.skills p { margin: 0; color: var(--muted); font-size: 15px; }
+
+.contact { display: grid; gap: 10px; font: 400 15px/1.5 var(--mono); }
+.contact .addr { user-select: all; color: var(--fg); }
+footer { margin-top: 56px; font: 400 12px/1.5 var(--mono); color: var(--muted); }
+
+@media (max-width: 720px) {
+  .entry { grid-template-columns: 1fr; gap: 14px; }
+  .rail { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .hero { padding-block: 28px 32px; }
+  .photo img { aspect-ratio: 4 / 3; object-position: 60% 70%; }
+  .lede { font-size: 17px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .svg-fan, .svg-sys { stroke-dasharray: 2000; stroke-dashoffset: 0; animation: draw 1.4s ease-out; }
+  @keyframes draw { from { stroke-dashoffset: 2000; } to { stroke-dashoffset: 0; } }
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <a class="mark" href="#about">Alec Guan</a>
+    <nav aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <a href="about.html">About me</a>
+    </nav>
+  </header>
+
+  <figure class="photo">
+    <img src="car-night.jpg" alt="The Illini Electric Motorsports Formula SAE car at night under a full moon, its green ready light glowing" width="1920" height="1280">
+    <div class="overlay">
+      <h1>Alec Guan</h1>
+      <p>Mechanical engineering · University of Illinois Urbana-Champaign</p>
+    </div>
+    <figcaption>Illini Electric Motorsports</figcaption>
+  </figure>
+
+  <div class="hero" id="about">
+    <p class="lede">I'm Alec, a mechanical engineering student at the University of Illinois Urbana-Champaign. I like taking on difficult projects, because that's where I learn the most.</p>
+    <p class="intro">Right now I'm the responsible engineer and project lead for accumulator cooling on Illini Electric Motorsports, the Formula SAE Electric team at UIUC. The accumulator is our 138S1P, 600 V lithium-ion tractive battery pack, and both the FSAE rules and the cell manufacturer require every cell to stay below 60 °C. My work, from the cooling models to the pressure-drop and heat-transfer testing to the CAD integration, is what keeps the pack under that limit.</p>
+    <p class="intro">From 2023 to 2026 I captained VEX Robotics team 95071X, where we reached the grand semifinals at the 2025 World Championship. Outside of competition I build projects to learn new skills, including a CoreXY 3D printer, an ESP32 self-balancing robot, and a CNC pen plotter.</p>
+  </div>
+
+  <section id="work" aria-labelledby="work-h">
+    <h2 id="work-h">Engineering work</h2>
+
+    <article class="entry">
+      <div class="rail">
+        <div><b>Illini Electric Motorsports</b>Formula SAE</div>
+        <div><b>Project lead</b>Accumulator cooling</div>
+        <div><b>Aug 2026 – present</b>Champaign, IL</div>
+        <div class="tags"><span>MATLAB</span><span>Arduino</span><span>ANSYS Fluent</span><span>PTC Creo</span></div>
+      </div>
+      <div class="body">
+        <h3>Cooling a 600 V battery pack</h3>
+        <p>On Illini Electric Motorsports, the Formula SAE Electric team at UIUC, I'm the project lead for cooling on our 2027 tractive system battery pack (accumulator). The 600 V pack is laid out in a 138S1P configuration, split into six segments of 23 cells. Air comes in through holes on the sides of the case, passes over all six segments, and gets pulled out by an exhaust manifold. Per FSAE rules and the cell manufacturer's specifications, cell temperatures must stay below 60 °C at all times. My project, which includes building cooling models, creating pressure drop and thermal convection testing procedures, and CAD integration, is what makes staying under that limit possible.</p>
+        <p class="note">Accumulator CAD is not shown here to keep the 2027 design confidential from other teams ahead of competition.</p>
+
+        <dl class="specs">
+          <div><dt>Pack</dt><dd>138S · 600 V</dd></div>
+          <div><dt>Heat load</dt><dd>800 W</dd></div>
+          <div><dt>Cell limit</dt><dd>60 °C</dd></div>
+          <div><dt>Airflow requirement</dt><dd>~100 CFM at ~63 Pa</dd></div>
+        </dl>
+
+        <figure class="clip">
+          <video id="carclip" src="car-run.mp4" poster="car-run-poster.jpg" width="640" height="356" autoplay muted loop playsinline aria-label="The car driving through a turn on a test lot"></video>
+          <figcaption>Icarus, IEM's 2026 car</figcaption>
+        </figure>
+
+        <h4>Do we need cooling at all?</h4>
+        <p>At the beginning of the design cycle, we needed to justify having a cooling system in the first place. The approach was to take the largest load case the pack would see at competition and 1) determine whether a cooling system was needed to stay under 60 °C during it, then 2) size the cooling system for it. We decided that case was the 22 km endurance event.</p>
+        <p>Normally, cell temperature change across endurance is easy to measure: just pull driving data from competition. This year, though, we discovered that our cell thermistor circuits had been set up incorrectly, so that data was unusable.</p>
+        <p>To characterize cell thermal behavior during endurance stints instead, I developed a transient thermal model of a single cell in MATLAB. It takes a current profile directly from vehicle driving data and calculates heat generation as the sum of ohmic heating, from the cell's internal resistance as a function of state of charge (SOC), and reversible entropic heating.</p>
+        <figure class="shot">
+          <img src="thermal-model.png" alt="MATLAB plot of cell current draw, cumulative heat, and predicted cell temperature over a driving stint, with predicted temperature rising 35.5 °C" width="1447" height="901" loading="lazy">
+          <figcaption>Transient model on a half-endurance run: current draw (blue), cumulative heat generated (orange), and predicted cell temperature rise (yellow, peaking at +35.5 °C), compared with measured cell temperature rise from the car after we fixed the thermistor circuits (purple).</figcaption>
+        </figure>
+        <p>Because a 22 km track is hard to replicate for testing, our team runs half-endurance (11 km) stints instead. Even in those, cell temperatures shot above 80 °C. For further validation, I pulled FSAE Energy Meter current profiles from other teams running similar powertrains, and found that even with power limiting during endurance, our cells would easily pass 100 °C without cooling. This model became the starting point for sizing the cooling system.</p>
+
+        <h4>Cooling model</h4>
+        <p>The cooling model itself is a steady-state energy balance. It takes the 800 W pack heat load derived from our lap time simulator (LapSim) and assumes the cells sit at 55 °C, which leaves some margin below the 60 °C limit. It focuses on the last row of cells because that's the worst case: by the time the air gets there, it has picked up heat from every row in front of it. At our design point the air warms up about 15 °C on the way through, so the last row only gets about a 10 °C difference to work with instead of 25 °C at the inlet. That was the biggest thing driving the airflow number up. The model ended up needing about 14 mph through the pack, or about 100 CFM, with a 1.2 safety factor.</p>
+        <figure class="diagram">
+          <div class="diagram-eq">Q̇<sub>cell</sub> ≤ hA(u) · (T<sub>cell</sub> − T<sub>air</sub>)</div>
+          <div class="chart-scroll">
+            <svg viewBox="0 0 640 236" role="img" aria-label="Cooling model flowchart. Thermal row: heat load to heat per cell, to air warming through the pack, to convection from cell to air. Airflow row: air velocity to air needed, to pack resistance. Convection and pack resistance both feed a pass or fail check.">
+              <defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" class="fc-head"/></marker></defs>
+              <text class="fc-row" x="0" y="16">Thermal: are the cells cool enough?</text>
+              <rect class="fc-in" x="0" y="28" width="120" height="62" rx="6"/>
+              <text class="fc-t" x="60" y="53" text-anchor="middle">Heat load</text>
+              <text class="fc-e" x="60" y="73" text-anchor="middle">800 W, LapSim</text>
+              <rect class="fc-box" x="140" y="28" width="160" height="62" rx="6"/>
+              <text class="fc-t" x="220" y="53" text-anchor="middle">Heat per cell</text>
+              <text class="fc-e" x="220" y="73" text-anchor="middle">Q̇cell = Q̇ / N</text>
+              <rect class="fc-box" x="320" y="28" width="160" height="62" rx="6"/>
+              <text class="fc-t" x="400" y="53" text-anchor="middle">Air warms through pack</text>
+              <text class="fc-e" x="400" y="73" text-anchor="middle">Tair = Tin + Q̇ / (ṁ·cp)</text>
+              <rect class="fc-box" x="500" y="28" width="140" height="62" rx="6"/>
+              <text class="fc-t" x="570" y="53" text-anchor="middle">Convection</text>
+              <text class="fc-e" x="570" y="73" text-anchor="middle">hA(u)·(Tcell − Tair)</text>
+              <line class="fc-arrow" x1="120" y1="59" x2="137" y2="59" marker-end="url(#ah1)"/>
+              <line class="fc-arrow" x1="300" y1="59" x2="317" y2="59" marker-end="url(#ah1)"/>
+              <line class="fc-arrow" x1="480" y1="59" x2="497" y2="59" marker-end="url(#ah1)"/>
+
+              <text class="fc-row" x="0" y="146">Airflow: what do the fans need to do?</text>
+              <rect class="fc-in" x="0" y="158" width="120" height="62" rx="6"/>
+              <text class="fc-t" x="60" y="183" text-anchor="middle">Air velocity</text>
+              <text class="fc-e" x="60" y="203" text-anchor="middle">u, design input</text>
+              <rect class="fc-box" x="140" y="158" width="160" height="62" rx="6"/>
+              <text class="fc-t" x="220" y="183" text-anchor="middle">Air needed</text>
+              <text class="fc-e" x="220" y="203" text-anchor="middle">V̇ = u · Aflow</text>
+              <rect class="fc-box" x="320" y="158" width="160" height="62" rx="6"/>
+              <text class="fc-t" x="400" y="183" text-anchor="middle">Pack resists flow</text>
+              <text class="fc-e" x="400" y="203" text-anchor="middle">ΔP = K·½ρu² + ΔPtrans</text>
+              <rect class="fc-out" x="500" y="158" width="140" height="62" rx="6"/>
+              <text class="fc-to" x="570" y="183" text-anchor="middle">Pass / fail</text>
+              <text class="fc-eo" x="570" y="203" text-anchor="middle">MOS, CFM, Pa</text>
+              <line class="fc-arrow" x1="120" y1="189" x2="137" y2="189" marker-end="url(#ah1)"/>
+              <line class="fc-arrow" x1="300" y1="189" x2="317" y2="189" marker-end="url(#ah1)"/>
+              <line class="fc-arrow" x1="480" y1="189" x2="497" y2="189" marker-end="url(#ah1)"/>
+              <line class="fc-arrow" x1="570" y1="90" x2="570" y2="155" marker-end="url(#ah1)"/>
+            </svg>
+          </div>
+          <div class="fc-key" aria-hidden="true"><span><i class="k-in"></i>Input</span><span><i class="k-box"></i>Step</span><span><i class="k-out"></i>Result</span></div>
+          <figcaption>The cooling model is an energy budget for the last row of cells. The thermal row checks whether convection can carry away each cell's heat in air that has already been warmed by the rows ahead. The airflow row turns the same air velocity into the flow and pressure the fans must supply.</figcaption>
+        </figure>
+
+        <h4>Measuring heat transfer</h4>
+        <p>I didn't want to trust textbook correlations for a pack this tightly packed, so I measured the heat transfer myself. I built a mock column of the accumulator with the segment walls and cell tabs, heated the cells by discharging them, and ran five tests at different fan speeds. From the temperatures I backed out how much heat each cell sheds per degree, then fit that to air speed. I also had to decide what to do outside the speeds I tested, since the curve fit gets unreliable there, so the model holds the value flat above the tested range and drops it linearly toward zero below it.</p>
+
+        <h4>Measuring pressure loss</h4>
+        <p>For accumulator pressure drop, I built a pitot-tube rig with five differential pressure sensors on an Arduino, running through an I²C multiplexer, and swept fan voltage to measure airflow and static pressure inside the case. From the data I fit a loss coefficient for the pack, then added hand-calculated losses for the inlet and exhaust meshes and for the air speeding up into the fans.</p>
+        <figure class="shot flow">
+          <img src="pitot-sweep.png" alt="Pitot test results: intake velocity stepping up with fan voltage from 12 to 24 volts, and mean velocity rising from 28.2 to 44.6 mph" width="1534" height="933" loading="lazy">
+          <figcaption>Fan-voltage sweep on the pitot rig: intake velocity at each voltage step (top) and the mean velocity per step, from 28.2 mph at 12 V to 44.6 mph at 24 V (bottom).</figcaption>
+        </figure>
+
+        <h4>Fans</h4>
+        <p>Then I wrote a fan model. Fan datasheets list max airflow at zero pressure, which isn't useful, because the pack pushes back harder the more air you move. My script finds where each fan's pressure curve crosses the pack's curve, which gives the airflow you actually get, and it shows why adding fans has diminishing returns. I pulled fan curves from the DigiKey catalog, reading points off the graphs, and ran every fan I could find through it. I chose two 60 × 38 mm San Ace 9GA0624P1J03 fans, which deliver about 111 CFM at 36 W, roughly 14 Wh over an endurance run, well within our LV budget.</p>
+        <figure class="diagram">
+          <div class="chart-scroll">
+            <svg viewBox="0 0 640 214" role="img" aria-label="Fan model flowchart. A datasheet fan curve is scaled for N fans in parallel; with the pack resistance curve it gives the operating point, which is checked against the airflow requirement from the thermal model.">
+              <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" class="fc-head"/></marker></defs>
+              <rect class="fc-in" x="0" y="0" width="190" height="62" rx="6"/>
+              <text class="fc-t" x="95" y="25" text-anchor="middle">Fan curve</text>
+              <text class="fc-e" x="95" y="45" text-anchor="middle">P vs CFM, from datasheet</text>
+              <rect class="fc-in" x="225" y="0" width="190" height="62" rx="6"/>
+              <text class="fc-t" x="320" y="25" text-anchor="middle">Pack resistance</text>
+              <text class="fc-e" x="320" y="45" text-anchor="middle">ΔP(V̇), pack + mesh + ducting</text>
+              <rect class="fc-in" x="450" y="0" width="190" height="62" rx="6"/>
+              <text class="fc-t" x="545" y="25" text-anchor="middle">Airflow requirement</text>
+              <text class="fc-e" x="545" y="45" text-anchor="middle">V̇needed, from thermal model</text>
+
+              <line class="fc-arrow" x1="95" y1="62" x2="95" y2="117" marker-end="url(#ah2)"/>
+              <line class="fc-arrow" x1="320" y1="62" x2="320" y2="117" marker-end="url(#ah2)"/>
+              <line class="fc-arrow" x1="545" y1="62" x2="545" y2="117" marker-end="url(#ah2)"/>
+
+              <rect class="fc-box" x="0" y="120" width="190" height="80" rx="6"/>
+              <text class="fc-t" x="95" y="146" text-anchor="middle">N fans in parallel</text>
+              <text class="fc-e" x="95" y="166" text-anchor="middle">flow × N at same pressure</text>
+              <text class="fc-e" x="95" y="182" text-anchor="middle">PN(V̇) = P1(V̇ / N)</text>
+              <rect class="fc-box" x="225" y="120" width="190" height="80" rx="6"/>
+              <text class="fc-t" x="320" y="146" text-anchor="middle">Operating point</text>
+              <text class="fc-e" x="320" y="166" text-anchor="middle">solve PN(V̇) = ΔP(V̇)</text>
+              <text class="fc-e" x="320" y="182" text-anchor="middle">→ delivered CFM and Pa</text>
+              <rect class="fc-out" x="450" y="120" width="190" height="80" rx="6"/>
+              <text class="fc-to" x="545" y="146" text-anchor="middle">Pass / fail</text>
+              <text class="fc-eo" x="545" y="166" text-anchor="middle">V̇op ≥ V̇needed</text>
+              <text class="fc-eo" x="545" y="182" text-anchor="middle">CFM/fan, Pa, W, MOS</text>
+
+              <line class="fc-arrow" x1="190" y1="160" x2="222" y2="160" marker-end="url(#ah2)"/>
+              <line class="fc-arrow" x1="415" y1="160" x2="447" y2="160" marker-end="url(#ah2)"/>
+            </svg>
+          </div>
+          <div class="fc-key" aria-hidden="true"><span><i class="k-in"></i>Input</span><span><i class="k-box"></i>Step</span><span><i class="k-out"></i>Result</span></div>
+          <figcaption>The fan model scales one fan's curve for N fans in parallel, finds where it meets the pack's resistance, and checks that delivered airflow against the thermal model's requirement.</figcaption>
+        </figure>
+        <div class="table-wrap">
+          <table class="fans">
+            <caption>Fans that met the 99.9 CFM requirement at 14 mph (K = 2.74)</caption>
+            <thead><tr><th scope="col">Fan</th><th scope="col">Size (mm)</th><th scope="col">V</th><th scope="col">Qty</th><th scope="col">Total CFM</th><th scope="col">Static Pa</th><th scope="col">Total W</th><th scope="col">MOS</th></tr></thead>
+            <tbody>
+              <tr><td>San Ace 9WPA0824P4G001</td><td>80×25</td><td>24</td><td>2</td><td>114.8</td><td>84.1</td><td>17.3</td><td>0.15</td></tr>
+              <tr><td>San Ace 9LG0624P4S001</td><td>60×25</td><td>24</td><td>3</td><td>110.4</td><td>76.4</td><td>24.5</td><td>0.11</td></tr>
+              <tr><td>San Ace 9G0624P4S001</td><td>60×25</td><td>24</td><td>3</td><td>120.6</td><td>91.1</td><td>24.5</td><td>0.21</td></tr>
+              <tr><td>San Ace 9WPA0624P4G001</td><td>60×25</td><td>24</td><td>3</td><td>129.6</td><td>105.3</td><td>33.1</td><td>0.30</td></tr>
+              <tr class="sel"><td>San Ace 9GA0624P1J03 <span class="pick">Selected</span></td><td>60×38</td><td>24</td><td>2</td><td>111.4</td><td>83.6</td><td>36.0</td><td>0.11</td></tr>
+              <tr><td>San Ace 9GV0624P1G03</td><td>60×38</td><td>24</td><td>2</td><td>138.9</td><td>130.1</td><td>67.2</td><td>0.39</td></tr>
+              <tr><td>San Ace 9HVA0812P1G001</td><td>80×38</td><td>12</td><td>2</td><td>209.3</td><td>279.6</td><td>84.0</td><td>1.10</td></tr>
+              <tr><td>San Ace 9HVB0812P1G001</td><td>80×38</td><td>12</td><td>2</td><td>225.0</td><td>323.1</td><td>115.2</td><td>1.25</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <figure class="chart">
+          <div class="legend" aria-hidden="true">
+            <span><i style="background: var(--accent)"></i>2 fans, combined curve</span>
+            <span><i style="background: var(--heat)"></i>Pack + mesh resistance</span>
+            <span><i style="border-top: 2px dashed var(--muted); height: 0"></i>Required airflow</span>
+          </div>
+          <div class="chart-scroll">
+            <svg id="opchart" viewBox="0 0 640 330" role="img" aria-label="Fan curve for two 60 mm fans crossing the accumulator system curve at about 111 CFM and 84 pascals, above the 100 CFM requirement"></svg>
+          </div>
+          <figcaption>Fan selection by operating point. The fans settle where their pressure curve meets the pack's resistance, not at their free-air rating. Shown: 2× San Ace 9GA0624P1J03 (60 × 38 mm, 24 V, straight-line datasheet curve) against a pack loss coefficient of 2.74.</figcaption>
+        </figure>
+
+        <h4>Next</h4>
+        <p>Right now I'm building an ANSYS Fluent CFD model of the whole cooling path, including the monocoque and the exhaust, to check my hand-calculated pressure losses and design the inlet. Part of it is also just for fun.</p>
+      </div>
+    </article>
+
+    <article class="entry" id="vex">
+      <div class="rail">
+        <div><b>VEX Robotics 95071X</b>Extremity</div>
+        <div><b>Team captain, primary robot designer</b>9-member team</div>
+        <div><b>Aug 2023 – Jun 2026</b>Saratoga, CA</div>
+        <div class="tags"><span>Onshape</span></div>
+      </div>
+      <div class="body">
+        <h3>VEX Robotics</h3>
+        <p class="role">Team captain and primary robot designer</p>
+        <dl class="specs">
+          <div><dt>2025 World Championship</dt><dd>Grand semifinalist (top 4 of 20k+)</dd></div>
+          <div><dt>2025</dt><dd>National finalist</dd></div>
+          <div><dt>2026</dt><dd>National semifinalist</dd></div>
+        </dl>
+        <figure class="vex-banner">
+          <img src="vex-team-2025.jpg" alt="Team 95071X kneeling with their robot, trophies, and the division champion banner at the 2025 VEX World Championship" width="1536" height="1153" loading="lazy">
+        </figure>
+        <p>I led a nine-member team in designing, building, and refining our competition robots, and I was responsible for the robot's mechanical design in Onshape, including the drivetrain, intakes, pneumatic systems, and structure.</p>
+        <p>Each season we followed VEX's six-step design process. We started by identifying the game: how points were scored, what the rules constrained, and what won matches. We then brainstormed mechanisms and used decision matrices to choose which designs to model in CAD. From there we built, tested in practice and matches, and improved based on what the data showed, going through several iterations each season.</p>
+
+        <h4>2024–25: High Stakes</h4>
+        <figure class="field">
+          <img src="field-high-stakes.png" alt="Render of the VEX High Stakes field with red and blue rings, mobile goals, and the central climbing ladder" width="997" height="384" loading="lazy">
+          <figcaption>High Stakes field. Render: VEX Robotics</figcaption>
+        </figure>
+        <p>High Stakes was about scoring rings onto stakes and onto mobile goals that robots carry around the field, with a ladder to climb at the end. Holding a mobile goal reliably while being pushed was the core mechanical problem, and it's where my most significant contribution came from: the "Tipper," a pneumatic latching mechanism designed to securely grip and manipulate mobile goals. Developing it meant working through linkage geometry, actuator placement, available packaging space, and the forces transmitted through the assembly. I refined it through physical prototyping and competition testing, focusing on engagement consistency, actuation speed, and reliability.</p>
+        <p>The mechanism was eventually adopted by over 30 teams worldwide, including 11 of the top 20 teams at the 2025 VEX World Championship. That season our robot won its division at Worlds and reached the Grand Semifinals, finishing among the top four teams worldwide, and finished as a national finalist.</p>
+        <div class="robot-pair">
+          <figure class="robot">
+            <img src="vex-worlds-2025.jpg" alt="The 2025 High Stakes robot on the World Championship division champion banner, flanked by two trophies" width="961" height="1280" loading="lazy">
+            <figcaption>2025 High Stakes robot at Worlds</figcaption>
+          </figure>
+        <figure class="robot">
+          <img src="vex-cad.jpg" alt="Onshape CAD render of the 2025 High Stakes robot holding a mobile goal stacked with blue rings" width="1090" height="1098" loading="lazy">
+          <figcaption>2025 High Stakes robot, CAD in Onshape</figcaption>
+        </figure>
+        </div>
+
+        <h4>2025–26: Push Back</h4>
+        <figure class="field">
+          <img src="field-push-back.png" alt="Render of the VEX Push Back field with red and blue blocks, long goals along the sides, and the center goal structure" width="600" height="208" loading="lazy">
+          <figcaption>Push Back field. Render: VEX Robotics</figcaption>
+        </figure>
+        <p>Push Back was played with blocks that robots collect and push into long and center goals. Our robot carried blocks along an S-shaped intake path, passing them through several roller stages to lift them from the floor up to the goals. One of the harder design challenges was tuning the compression at each roller stage: too little and blocks slipped or stalled, too much and they jammed. We solved it by using zip ties whose length could be adjusted individually at each stage, which let us tune the grip on every roller without redesigning or remaking parts.</p>
+        <figure class="robot">
+          <img src="vex-2026.jpg" alt="The 2026 Push Back robot on a display table next to two blue CREATE U.S. Open award plaques" width="1400" height="1054" loading="lazy">
+          <figcaption>2026 Push Back robot</figcaption>
+        </figure>
+
+        <h4>Leading the team</h4>
+        <p>As team captain, my official responsibilities were managing the team's budget and documentation. Beyond that, I managed team dynamics and mentored younger students.</p>
+      </div>
+    </article>
+  </section>
+
+  <section id="projects" aria-labelledby="proj-h">
+    <h2 id="proj-h">Personal projects</h2>
+
+    <article class="entry">
+      <div class="rail">
+        <div><b>Jun – Aug 2024</b></div>
+        <div class="tags"><span>CAD</span><span>Raspberry Pi</span><span>Klipper</span><span>Mainsail</span></div>
+      </div>
+      <div class="body">
+        <h3>CoreXY 3D printer</h3>
+        <p>I designed and built a custom CoreXY 3D printer with a belt-driven motion system. I designed and fabricated 14 custom parts, including motor mounts, brackets, and other structural components. Most of the build was getting the mechanics right: I assembled the frame, mounted the linear rails, and routed the two belts so both stepper motors work together to drive the printhead, then tensioned them evenly so the X and Y axes stayed square. I wired the control board, steppers, thermistors, and heaters myself and packaged the electronics in a printed enclosure beside the frame.</p>
+        <figure class="robot cad-small">
+          <img src="printer-carriage-cad.png" alt="CAD model of the printer's right carriage: a blue two-plate block with bearing and pulley bores and a mounting flange" width="1015" height="948" loading="lazy">
+          <figcaption>CAD of the right carriage, one of the more complex custom parts</figcaption>
+        </figure>
+        <p>I used a Raspberry Pi running Klipper and Mainsail to configure and control the printer, including the CoreXY kinematics, motor directions, rotation distances, and temperature sensors. I also implemented sensorless homing using the stepper drivers' StallGuard feature, which detects the change in motor load when the printhead reaches the end of an axis. This let the printer find its X and Y home positions without physical limit switches. I tuned the drivers' stall detection thresholds and homing speeds to get consistent homing.</p>
+        <div class="media-grid">
+          <figure>
+            <img src="printer-build.jpg" alt="The CoreXY printer on a workbench with its blue and white printed frame parts, belts, Raspberry Pi, and touchscreen" width="1536" height="1153" loading="lazy">
+            <figcaption>The finished printer with its Raspberry Pi and touchscreen</figcaption>
+          </figure>
+          <figure class="m-tall">
+            <video src="printer-run.mp4" poster="printer-run-poster.jpg" width="360" height="640" autoplay muted loop playsinline aria-label="The printer's printhead moving across the bed during a print"></video>
+            <figcaption>Printing</figcaption>
+          </figure>
+          <figure>
+            <img src="printer-benchy.jpg" alt="Three 3DBenchy test prints in white, orange, and gray" width="1536" height="1153" loading="lazy">
+            <figcaption>3DBenchy test prints</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="rail">
+        <div><b>Jul – Sep 2026</b></div>
+        <div class="tags"><span>C++</span><span>ESP32</span><span>PID</span></div>
+      </div>
+      <div class="body">
+        <h3>Self-balancing robot</h3>
+        <p>I designed and built a two-wheeled, self-balancing robot using an ESP32 microcontroller, an MPU6050 inertial measurement unit (IMU), and stepper motors to explore feedback control, sensor fusion, and embedded systems. I programmed the robot in C++, implementing a complementary filter that fused accelerometer and gyroscope measurements to estimate its tilt angle in real time. The accelerometer provided an absolute orientation reference relative to gravity, while the gyroscope captured rapid angular motion. Combining both reduced accelerometer noise and compensated for gyroscope drift, producing a more stable estimate of the robot's orientation.</p>
+        <p>Using this tilt estimate, I developed a PID feedback controller that calculated corrective motor commands based on the robot's deviation from upright. The proportional term generated an immediate response to tilt, the derivative term damped oscillations, and the integral term compensated for persistent steady-state error. I iteratively tuned the gains to balance responsiveness and stability while accounting for motor response, sensor noise, and the robot's mechanical dynamics. This project gave me practical experience implementing closed-loop control on embedded hardware, and showed me how sensor processing, control algorithms, and mechanical design have to work together to stabilize an inherently unstable system.</p>
+        <div class="robot-pair narrow">
+          <figure class="robot">
+            <img src="balancer-top.jpg" alt="Top-down view of the self-balancing robot: a printed pink and white chassis with two stepper motors and wheels, the ESP32, motor drivers, power switch, and wiring" width="961" height="1280" loading="lazy">
+            <figcaption>Top-down view: steppers, ESP32, drivers, and power switch inside the printed chassis</figcaption>
+          </figure>
+          <figure class="robot">
+            <video src="balancer-run.mp4" poster="balancer-run-poster.jpg" width="360" height="640" autoplay muted loop playsinline aria-label="The robot balancing upright on the floor after being released"></video>
+            <figcaption>Balances on its own for a few seconds. More PID tuning would get it further, but I've set it aside for now.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="rail">
+        <div><b>Summer 2025</b></div>
+        <div class="tags"><span>CAD</span><span>Arduino</span><span>GRBL</span><span>Inkscape</span></div>
+      </div>
+      <div class="body">
+        <h3>CNC pen plotter</h3>
+        <p>I designed and built a three-axis CNC pen plotter from scratch, using an aluminum extrusion frame and custom 3D-printed parts. I originally built it as a small CNC router, with a Dremel mounted as the spindle, but I didn't have the equipment to run it safely, so I turned it into a pen plotter instead. All three axes, including the pen's up-and-down motion, are driven by stepper motors through lead screws, which gives precise positioning without the belt stretch you get on a belt-driven machine.</p>
+        <p>The plotter runs on an Arduino with a CNC shield running GRBL, which turns G-code into coordinated stepper motion. To draw, I convert vector artwork into G-code with Inkscape's G-code generator, then stream it to the machine, which raises and lowers the pen and traces each path.</p>
+        <div class="robot-pair narrow">
+          <figure class="robot">
+            <img src="plotter-router.jpg" alt="The machine in its original CNC router setup, with a Dremel mounted in the blue printed carriage over a wood spoilboard" width="961" height="1280" loading="lazy">
+            <figcaption>The original router setup, with a Dremel as the spindle</figcaption>
+          </figure>
+          <figure class="robot">
+            <img src="plotter-drawing.jpg" alt="Top-down view of the pen plotter's blue printed carriage and lead screws above a sheet of paper with a traced line portrait" width="961" height="1280" loading="lazy">
+            <figcaption>The PogChamp face, traced in Inkscape and drawn by the plotter</figcaption>
+          </figure>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="skills" aria-labelledby="skills-h">
+    <h2 id="skills-h">Skills</h2>
+    <div class="skills">
+      <div><h4>CAD and simulation</h4><p>PTC Creo, Autodesk Fusion, Onshape, ANSYS Fluent (CFD), ANSYS FEA</p></div>
+      <div><h4>Programming</h4><p>MATLAB, C++, C, Java</p></div>
+      <div><h4>Embedded and controls</h4><p>ESP32, Arduino, Raspberry Pi, I²C, PID control, sensor fusion</p></div>
+      <div><h4>Hardware</h4><p>3D printing, lathe, waterjet, composite layup and manufacturing, data acquisition, PCB and electrical integration</p></div>
+    </div>
+  </section>
+
+  <section id="contact" aria-labelledby="contact-h">
+    <h2 id="contact-h">Contact</h2>
+    <div class="contact">
+      <span class="addr">alecguan100@gmail.com</span>
+      <a href="https://www.linkedin.com/in/alec-guan-13a492320/">linkedin.com/in/alec-guan-13a492320</a>
+    </div>
+    <footer>B.S. Mechanical Engineering, expected May 2029 · GPA 4.0/4.0</footer>
+  </section>
+</div>
+
+<script>
+(function () {
+  var vex = document.getElementById('vex');
+  if (!vex || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { document.body.classList.toggle('zone-vex', e.isIntersecting); });
+  }, { rootMargin: '-35% 0px -35% 0px' });
+  io.observe(vex);
+})();
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('video[autoplay]').forEach(function (v) {
+      v.removeAttribute('autoplay'); v.pause(); v.controls = true;
+    });
+  }
+})();
+(function () {
+  var svg = document.getElementById('opchart');
+  if (!svg) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var W = 640, H = 330, L = 56, R = 18, T = 14, B = 44;
+  var qMax = 170, pMax = 220;
+  function x(q) { return L + (q / qMax) * (W - L - R); }
+  function y(p) { return H - B - (p / pMax) * (H - T - B); }
+  function el(tag, attrs, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    svg.appendChild(e);
+    return e;
+  }
+
+  // one fan (San Ace 9GA0624P1J03, two-point datasheet curve), two in parallel
+  var fq = [0, 62];
+  var fp = [820, 0];
+  var N = 2;
+  function fanP(q) {
+    var qs = q / N;
+    if (qs <= 0) return fp[0];
+    for (var i = 1; i < fq.length; i++) {
+      if (qs <= fq[i]) return fp[i - 1] + (fp[i] - fp[i - 1]) * (qs - fq[i - 1]) / (fq[i] - fq[i - 1]);
+    }
+    return 0;
+  }
+  // system: K * 1/2 rho u^2 + expansion loss into the fan faces
+  var K = 2.74, rho = 1.16, Aflow = 0.00753321, Afan = N * Math.PI / 4 * 0.06 * 0.06;
+  function sysP(q) {
+    var u = q * 0.000471947 / Aflow;
+    var qd = 0.5 * rho * u * u;
+    var trans;
+    if (Afan >= Aflow) {
+      trans = Math.pow(1 - Aflow / Afan, 2) * qd;           // expansion into larger fan faces
+    } else {
+      var vf = u * Aflow / Afan;                             // contraction into smaller fan faces
+      trans = 0.5 * (1 - Afan / Aflow) * 0.5 * rho * vf * vf;
+    }
+    return K * qd + trans;
+  }
+
+  // grid and ticks
+  for (var p = 0; p <= pMax; p += 50) {
+    el('line', { x1: L, x2: W - R, y1: y(p), y2: y(p), 'class': 'svg-axis', 'stroke-width': p === 0 ? 1 : 0.5 });
+    el('text', { x: L - 8, y: y(p) + 4, 'text-anchor': 'end', 'class': 'svg-text' }, p);
+  }
+  for (var q = 0; q <= 160; q += 40) {
+    el('line', { x1: x(q), x2: x(q), y1: H - B, y2: H - B + 5, 'class': 'svg-axis' });
+    el('text', { x: x(q), y: H - B + 20, 'text-anchor': 'middle', 'class': 'svg-text' }, q);
+  }
+  el('text', { x: (L + W - R) / 2, y: H - 4, 'text-anchor': 'middle', 'class': 'svg-text' }, 'Airflow (CFM)');
+  el('text', { x: L - 8, y: T - 2 + 4, 'text-anchor': 'end', 'class': 'svg-text' }, 'Pa');
+
+  // requirement line
+  var req = 99.9;
+  el('line', { x1: x(req), x2: x(req), y1: T, y2: H - B, 'class': 'svg-req', 'stroke-width': 1 });
+  el('text', { x: x(req) - 6, y: T + 12, 'text-anchor': 'end', 'class': 'svg-text' }, 'need 99.9 CFM');
+
+  // curves
+  var dFan = '', dSys = '';
+  for (var i = 0; i <= 160; i++) {
+    var qq = (fq[fq.length - 1] * N) * i / 160;
+    dFan += (i ? 'L' : 'M') + x(qq).toFixed(1) + ' ' + y(fanP(qq)).toFixed(1);
+  }
+  for (var j = 0; j <= 160; j++) {
+    var qs = qMax * j / 160;
+    var ps = sysP(qs);
+    if (ps > pMax) break;
+    dSys += (j ? 'L' : 'M') + x(qs).toFixed(1) + ' ' + y(ps).toFixed(1);
+  }
+  el('path', { d: dSys, 'class': 'svg-sys' });
+  el('path', { d: dFan, 'class': 'svg-fan' });
+
+  // operating point by bisection
+  var lo = 0, hi = fq[fq.length - 1] * N;
+  for (var k = 0; k < 60; k++) {
+    var mid = (lo + hi) / 2;
+    if (fanP(mid) - sysP(mid) > 0) lo = mid; else hi = mid;
+  }
+  var qop = (lo + hi) / 2, pop = sysP(qop);
+  el('circle', { cx: x(qop), cy: y(pop), r: 4.5, 'class': 'svg-op' });
+  el('text', { x: x(qop) + 10, y: y(pop) - 10, 'class': 'svg-text' }, Math.round(qop) + ' CFM at ' + Math.round(pop) + ' Pa');
+})();
+</script>
+
+</body>
+</html>
